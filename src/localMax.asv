@@ -1,43 +1,19 @@
 function [centers, radius] = localMax(voteMatrix, threshold, fixRadius)
+    centers = zeros(0, 2);
+    localMaxMask = imregionalmax(voteMatrix);
     
-    if nargin == 3 %We use fix radius, in this case, voteMatrix is 2D
-        [row, col] = size(voteMatrix);
-      
-        for r = 1:row
-            for c = 1:col
-                peak = true;
-                if r + 1 <= row && c + 1 <= col
-                    if voteMatirx(r, c) < voteMatrix(r + 1, c + 1) + threshold;
-                        peak = false;
-                    end
-                end
-                    
-                if r + 1 <= row && c - 1 >= 1
-                    if voteMatirx(r, c) < voteMatrix(r + 1, c - 1) + threshold;
-                        peak = false;
-                    end
-                end
-                
-                if r - 1 >= 1 && c + 1 <= col
-                    if voteMatirx(r, c) < voteMatrix(r - 1, c + 1) + threshold;
-                        peak = false;
-                    end
-                end
-                
-                if r - 1 >= 1 && c - 1 >= 1
-                    if voteMatirx(r, c) < voteMatrix(r - 1, c - 1) + threshold;
-                        peak = false;
-                    end
-                end
-                
-                if peak == true
-                    centers = 
-                    
-                end
+    if nargin == 3 %We use fix radius, in this case, voteMatrix is 2D    
+        [potentialRow, potentialCol] = find(localMaxMask == 1);
+        for i = 1:length(potentialRow)
+            if voteMatrix(potentialRow(i), potentialCol(i)) > threshold
+                centers = [centers; potentialRow(i), potentialCol(i)];
             end
         end
+        radius = ones(size(centers, 1), 1) * fixRadius;
     else %In this case, voteMatrix is 3D
-    
+        for i = 1:size(localMaxMask, 3)
+            
+        end
     end
 
 

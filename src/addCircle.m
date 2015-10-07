@@ -4,7 +4,7 @@ function [ outImage ] = addCircle( inputImage, centers, radius)
     CIRCLE_COLOR = [0, 0, 255];
     
     outImage = inputImage;
-    [row, col] = size(inputImage);
+    [row, col, channel] = size(inputImage);
     
     numberCircles = size(centers, 1);
     for n = 1: numberCircles
