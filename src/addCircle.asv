@@ -1,0 +1,14 @@
+function [ outImage ] = addCircle( inputImage, centers, radius)
+    ANGLE_ITERATION = 36;
+    THETA_MIN = 2 * pi / ANGLE_ITERATION;  
+    
+    outImage = inputImage;
+    
+    numberCircles = size(centers, 1);
+    for n = 1: numberCircles
+        for i = 0: ANGLE_ITERATION
+            theta = THETAMIN * i;
+        end
+    end
+end
+

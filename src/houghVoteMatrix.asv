@@ -1,5 +1,30 @@
-function [ output_args ] = houghVoteMatrix(imgradient)
-
-    nargin
+function [ fixRadiusVotes ] = houghVoteMatrix(imEdge, radius, gradientDire)
+    
+    ANGLE_ITERATION = 36;
+    THETA_MIN = 2 * pi / ANGLE_ITERATION;
+    
+    [row, col] = size(imEdge);
+    fixRadiusVotes = zeros(row, col);
+    
+    if nargin == 2 % we don't use gradient directons
+        for r = 1:row
+            for c = 1:col
+                if imEdge(r, c) == 1
+                    for i = 0: ANGLE_ITERATION - 1
+                        theta = THETA_MIN * i;
+                        a = c - radius * cos(theta); 
+                        b = r + radius * sin(theta);
+                        
+                        if a >= 1 && a <= col && b >= 1 && b <= 
+                            
+                    end
+                end
+            end
+        end
+        
+    else % we use gradient directions
+        
+        
+    end
 end
 
