@@ -5,8 +5,10 @@ function [ ret ] = indexToPosition( x )
 %    the ret'th row or ret'th column position in image, indicates the
 %    center of circle
 
-    BIN_SIZE = 2;
+% The BIN_SIZE in voteIndex.m must equal BIN_SIZE in indexToPosition.m
+
+    BIN_SIZE = 1;
     
-    ret = (x - 1)* BIN_SIZE + floor(BIN_SIZE / 2);
+    ret = (x - 1)* BIN_SIZE + round(BIN_SIZE / 2);
 end
 
