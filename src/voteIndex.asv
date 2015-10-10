@@ -1,0 +1,9 @@
+function [ ret ] = voteIndex( x )
+% In order to have different bin size of vote space, this function input a 
+% num indicates the 
+
+    BIN_SIZE = 2;
+    
+    ret = floor(x / BIN_SIZE) + 1;
+end
+

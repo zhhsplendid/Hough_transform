@@ -1,51 +1,54 @@
-function [ centers, radius ] = detectCirclesAnyRadius( im, usegradient, fixRadius)
-    
+function [ centers, radius ] = detectCirclesAnyRadius( im, usegradient, fixRadius, THRESHOLD, FRACTION)
+% This funtion detect circles with any radius. It can also be used to detect
+% fix radius.
+
     intensity = double(rgb2gray(im));
     imEdge = edge(intensity, 'canny');
-    THRESHOLD = 20; %At least THRESHOLD votes in a pixel can a pixel be a center
+    
+    if nargin < 4
+        if usegradient
+            THRESHOLD = 4; 
+            FRACTION = 0.24;
+        else
+            THRESHOLD = 12;
+            FRACTION = 1/3;
+        end
+    end
     MIN_RADIUS = 2;
     
     if usegradient
         %TODO detect gradient
         xGradient = imfilter(intensity, [-1, 1] );
         yGradient = imfilter(intensity, [-1, 1]');
-        
         gradientDirections = atan2(yGradient, xGradient);
         
-        if nargin == 3
+        if fixRadius ~= 0
             voteMatrix = houghVoteMatrix(imEdge, fixRadius, gradientDirections);
-            [centers, radius] = localMax(voteMatrix, THRESHOLD, fixRadius);
+            [centers, radius] = localMax(voteMatrix, THRESHOLD, FRACTION, imEdge, fixRadius);
         else
             [row, col] = size(imEdge);
-            MAX_RADIUS = min(row, col) / 2;
+            MAX_RADIUS = floor(min(row, col) / 2);
             voteMatrix = zeros(row, col, MAX_RADIUS);
             for r = MIN_RADIUS: MAX_RADIUS
                 voteMatrix(:,:,r) = houghVoteMatrix(imEdge, r, gradientDirections);
             end
-            [centers, radius] = localMax(voteMatrix, THRESHOLD);
+            [centers, radius] = localMax(voteMatrix, THRESHOLD, FRACTION, imEdge);
         end
     else
-        if nargin == 3
+        if fixRadius ~= 0
             voteMatrix = houghVoteMatrix(imEdge, fixRadius);
-            [centers, radius] = localMax(voteMatrix, THRESHOLD, fixRadius);
+            imwrite(mat2gray(voteMatrix), 'hough_accumulator_array.jpg');
+            [centers, radius] = localMax(voteMatrix, THRESHOLD, FRACTION, imEdge, fixRadius);
         else
             [row, col] = size(imEdge);
-            MAX_RADIUS = min(row, col) / 2;
+            MAX_RADIUS = floor(min(row, col) / 2);
             voteMatrix = zeros(row, col, MAX_RADIUS);
             for r = MIN_RADIUS: MAX_RADIUS
+                
                 voteMatrix(:,:,r) = houghVoteMatrix(imEdge, r);
             end
-            [centers, radius] = localMax(voteMatrix, THRESHOLD);
+            [centers, radius] = localMax(voteMatrix, THRESHOLD, FRACTION, imEdge);
         end
     end
-    
-    %circles = addCircle(im, centers, radius);
-    %subplot(1, 3, 1);
-    %imshow(imEdge)
-    
-    %subplot(1, 3, 3);
-    %imshow(circles);
-    
-    
 end
 
