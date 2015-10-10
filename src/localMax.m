@@ -16,10 +16,10 @@ function [centers, radius] = localMax(voteMatrix, threshold, fraction, imEdge, f
 %   voteMatrix: in this case is 2D matrix. The vote accmulator matrix.   
 %
 %   [centers, radius] = localMax(voteMatrix, threshold, fraction, imEdge)
-%   imEdge is a binary image of edge detect
+%   imEdge: is a binary image of edge detect
 %   fraction: we need potential circle has at least fraction of pixels were detected as edges
-%   threshold, only those candidates with higher than threshold votes can be chosen as circle.
-%   voteMatrix in this case is 3D vote accmulator matrix. The 3rd dimension for different voting redius. 
+%   threshold: only those candidates with higher than threshold votes can be chosen as circle.
+%   voteMatrix: in this case is 3D vote accmulator matrix. The 3rd dimension for different voting redius. 
 
     centers = zeros(0, 2);
     localMaxMask = imregionalmax(voteMatrix);

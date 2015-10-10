@@ -1,6 +1,30 @@
 function [ centers, radius ] = detectCirclesAnyRadius( im, usegradient, fixRadius, THRESHOLD, FRACTION)
 % This funtion detect circles with any radius. It can also be used to detect
-% fix radius.
+% fix radius. The function firstly does edge detect, then vote by hough
+% transform, last find local max and check those local max points satisfy
+% certain conditions (local max and checking are both done by calling function
+% localMax.m. See the function for detail checking condition)
+%
+% @return
+%   centers: N * 2 matrix indicates the centers of circles
+%   radius: N * 1 matrix indicates the radiuses of circles
+% @call
+%   [ centers, radius ] = detectCirclesAnyRadius( im, usegradient, fixRadius, THRESHOLD, FRACTION)
+%   FRACTION: we need potential circle has at least fraction of pixels were detected as edges
+%   THRESHOLD: only those candidates with higher than threshold votes can be chosen as circle.
+%   fixRadius: the number for fix radius. If it equals 0, we detect circles with any radius.
+%   usegradient: optional flag for whether use gradient direction
+%   im: input RGB image.
+%
+%[centers, radius ] = detectCirclesAnyRadius( im, usegradient, fixRadius)
+%   With out input of FRACTION and THRESHOLD, we use default number
+%   if usegradient
+%       THRESHOLD = 4; 
+%       FRACTION = 0.24;
+%   else
+%       THRESHOLD = 12;
+%       FRACTION = 1/3;
+%   end
 
     intensity = double(rgb2gray(im));
     imEdge = edge(intensity, 'canny');
